@@ -1,6 +1,7 @@
 import React, { useEffect } from 'react'
 import { useState } from 'react'
 import styles from '../Styles/addform.module.css'
+import axios from 'axios'
 
 import { useForm } from 'react-hook-form';
 
@@ -15,30 +16,34 @@ export const Addform = () => {
      }
 
        const addformData = async ()=>{
-        try {
-         let res = await fetch(`https://dashboard.omnisellcrm.com/api/store`,{
-                method: "POST",
-                body: JSON.stringify(edata),
-                headers: {
-                  "Content-Type":"application/json"
-                }
-             })
-             res = await res.json()
-          } catch (error) {
-            console.log(error)
-          }
-      }
+      
+        axios.post(`https://dashboard.omnisellcrm.com/api/store`, edata)
+          .then((res)=> {
+            console.log(res);
+          })
+          .catch( (error) =>{
+            console.log(error);
+          });
+       }
 
      const handleSubmit =(e)=>{
         e.preventDefault();
-      
-         addformData()
-          setData({  name: "", 
-          email:"",
-          company_name:"",
-          phone_number:"",
-          requirement:"",
-          lead_types_id:""})
+        if(  edata.name =="" || edata.email == "" || edata.company_name == "" 
+             || edata.phone_number == "" || edata.requirement ||  edata.lead_types_id  =="" ){
+            alert("Please fill all Inputs to add Products")
+          }
+
+          else{
+            addformData()
+            setData({ 
+            name: "", 
+            email:"",
+            company_name:"",
+            phone_number:"",
+            requirement:"",
+            lead_types_id:"" })
+          }
+       
       }
 
 
