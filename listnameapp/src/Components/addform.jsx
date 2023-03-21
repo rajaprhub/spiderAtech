@@ -10,7 +10,7 @@ export const Addform = () => {
     const [edata,setData] = useState ( {  
         name: "",  email:"",  company_name:"",  phone_number:"",  requirement:"", lead_types_id:""
     } )
-  
+  console.log(edata)
      const handleInput = (event)=>{
         setData( {...edata,[event.target.name] : event.target.value})
      }
@@ -20,9 +20,11 @@ export const Addform = () => {
         axios.post(`https://dashboard.omnisellcrm.com/api/store`, edata)
           .then((res)=> {
             console.log(res.data);
+            alert('success')
           })
           .catch( (error) =>{
             console.log(error);
+            alert(error)
           });
        }
 
