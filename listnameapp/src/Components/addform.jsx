@@ -19,7 +19,7 @@ export const Addform = () => {
       
         axios.post(`https://dashboard.omnisellcrm.com/api/store`, edata)
           .then((res)=> {
-            console.log(res);
+            console.log(res.data);
           })
           .catch( (error) =>{
             console.log(error);
@@ -28,12 +28,7 @@ export const Addform = () => {
 
      const handleSubmit =(e)=>{
         e.preventDefault();
-        if(  edata.name =="" || edata.email == "" || edata.company_name == "" 
-             || edata.phone_number == "" || edata.requirement ||  edata.lead_types_id  =="" ){
-            alert("Please fill all Inputs to add Products")
-          }
-
-          else{
+       
             addformData()
             setData({ 
             name: "", 
@@ -42,9 +37,7 @@ export const Addform = () => {
             phone_number:"",
             requirement:"",
             lead_types_id:"" })
-          }
-       
-      }
+       }
 
 
 
@@ -66,10 +59,8 @@ export const Addform = () => {
              <label>Phone number</label>
              <input type="number"  onChange ={handleInput}      name="phone_number"   value = {edata.phone_number}    placeholder="enter phone_number"/>
             
-             <label>Requirements</label>
-             <input type="text"    onChange ={handleInput}      name="requirement "    value = {edata.requirement}      placeholder=" enter requirement"/>
-            
-             <label>lead_types_ids</label>
+
+             <label>Lead types ids</label>
              <input type="text"    onChange ={handleInput}      name="lead_types_id"   value = {edata.lead_types_id}   placeholder=" enter lead_types_id "/>
            
              <button type="submit" className={styles.btn}>  Add Now</button>
