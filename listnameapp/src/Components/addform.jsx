@@ -4,28 +4,15 @@ import axios from 'axios';
 import styles from '../styles/Form.module.css'
 
 
-export const Addform = () => {
+export const Addform = ( props) => {
+
+   const {onsubmit} = props
+
     const [submitSuccessful, setSubmitSuccessful] = useState('')
     let { register, handleSubmit, formState: { errors } } = useForm()
     const fillerrstyle = { color: 'maroon', fontWeight: 'Bold' }
     
-   const onsubmit = (data) => {
-      data = {
-        name: data.name,
-        email: data.name,
-        company_name: data.company_name,
-        phone_number: data.phone_number,
-        phone_number: data.phone_number,
-     }
-     console.log(data)
-         axios.post("https://dashboard.omnisellcrm.com/api/store", data ).then((res) => {
-            console.log('response', res);
-            setSubmitSuccessful('success')
-         }).catch((err) => {
-            console.log('err', err);
-            setSubmitSuccessful('error')
-        })
-     }
+   
 
     //   const clearinputt = ()=>  setinData({ 
     //   name: "", 
@@ -46,7 +33,7 @@ export const Addform = () => {
         <>
 
          <div className={styles.container}>
-            
+
             <form className='form' onSubmit={handleSubmit(onsubmit)}>
 
                {submitSuccessful.length == 0 ? null : submitSuccessful === 'error' ?
