@@ -1,75 +1,98 @@
-import React, { useEffect } from 'react'
-import { useState } from 'react'
-import styles from '../Styles/addform.module.css'
-import axios from 'axios'
-
+import React, { useState } from 'react';
 import { useForm } from 'react-hook-form';
+import axios from 'axios';
+import styles from '../styles/Form.module.css'
+
 
 export const Addform = () => {
-
-    const [edata,setData] = useState ( {  
-        name: "",  email:"",  company_name:"",  phone_number:"",  requirement:"", lead_types_id:""
-    } )
-  console.log(edata)
-     const handleInput = (event)=>{
-        setData( {...edata,[event.target.name] : event.target.value})
+    const [submitSuccessful, setSubmitSuccessful] = useState('')
+    let { register, handleSubmit, formState: { errors } } = useForm()
+    const fillerrstyle = { color: 'maroon', fontWeight: 'Bold' }
+    
+   const onsubmit = (data) => {
+      data = {
+        name: data.name,
+        email: data.name,
+        company_name: data.company_name,
+        phone_number: data.phone_number,
+        phone_number: data.phone_number,
+     }
+     console.log(data)
+         axios.post("https://dashboard.omnisellcrm.com/api/store", data ).then((res) => {
+            console.log('response', res);
+            setSubmitSuccessful('success')
+         }).catch((err) => {
+            console.log('err', err);
+            setSubmitSuccessful('error')
+        })
      }
 
-       const addformData = async ()=>{
-      
-        axios.post(`https://dashboard.omnisellcrm.com/api/store`, edata)
-          .then((res)=> {
-            console.log(res.data);
-            alert('success')
-          })
-          .catch( (error) =>{
-            console.log(error);
-            alert(error)
-          });
-       }
+    //   const clearinputt = ()=>  setinData({ 
+    //   name: "", 
+    //   email:"",
+    //   company_name:"",
+    //   phone_number:"",
+    //   requirement:"",
+    //   lead_types_id:"" })
 
-     const handleSubmit =(e)=>{
-        e.preventDefault();
-       
-            addformData()
-            setData({ 
-            name: "", 
-            email:"",
-            company_name:"",
-            phone_number:"",
-            requirement:"",
-            lead_types_id:"" })
-       }
+    // const finalSubmit = (e)=>{
+    //     e.preventDefault();
+    //     addformData(indata)
+    //     clearinputt()
+    //   }
+   
 
+    return (
+        <>
 
-
-  return (
-    <>
-         
          <div className={styles.container}>
-          <form  onSubmit={handleSubmit} >
-
-             <label>Name</label>
-             <input type="text"    onChange ={handleInput}      name="name"          value = {edata.name}     placeholder=" enter name"/>
             
-             <label>Email</label>
-             <input type="email"   onChange ={handleInput}      name="email"         value = {edata.email}    placeholder="enter email"/>
+            <form className='form' onSubmit={handleSubmit(onsubmit)}>
+
+               {submitSuccessful.length == 0 ? null : submitSuccessful === 'error' ?
+                    <span style={{ color: 'red' }}>Submission failed</span> :
+                    <span style={{ color: '#9ACD32' }}>Submitted successfully</span>}
+
+                <label>Name</label>
+                <input type="text"    
+                name="name"    {...register("name", { required: true, minLength: 4 })} />
+                {errors.name  && (<span style={fillerrstyle}>Please Fill out This Field</span>)}
+                {errors.name && errors.name.type === "minLength" && (<span style={fillerrstyle}> with min 4 characters</span>)}
           
-             <label>Company Name</label>
-             <input type="text"    onChange ={handleInput}      name="company_name"    value = {edata.company_name}   placeholder=" enter company_name"/>
-           
-             <label>Phone number</label>
-             <input type="number"  onChange ={handleInput}      name="phone_number"   value = {edata.phone_number}    placeholder="enter phone_number"/>
+                
+                <label>Email</label>
+                <input type="email"     
+                 name="email"     {...register("email", { required: true, pattern: /^[A-Z0-9._%+-]+@[A-Z0-9.-]+\.[A-Z]{2,4}$/i})} />
+                {errors.email && errors.email.type === "required" && (<p style={fillerrstyle}>Please Fill out This Field</p>)}
+                {errors.email  && errors.email.type === "pattern" && (<p style={fillerrstyle}>Enter valid email ID</p>)}
+
+
+                <label>Company Name</label>
+                <input type="text"  
+                 name="company_name"   {...register("company_name", { required: true, minLength: 4 })} />
+                {errors.company_name && errors.company_name.type === "required" && (<span style={fillerrstyle}>Please Fill out This Field</span>)}
+                {errors.company_name && errors.company_name.type === "minLength" && (<span style={fillerrstyle}>min 4 characters</span>)}
+
+
+                <label>Phone Number</label>
+                <input type="number"  
+                name='phone_number' {...register("phone_number", { required: true, pattern: /^[0-9]{10}$/ })} />
+                {errors.phone_number && errors.phone_number.type === "required" && (<span style={fillerrstyle}>Please Fill out This Field</span>)}
+                {errors.phone_number && errors.phone_number.type === "pattern" && (<span style={fillerrstyle}>Enter valid Phone number</span>)}
+
+                
+                <label>Company Name</label>
+                <input type ="text"    
+                   name="lead_types_id"  {...register("lead_types_id", { required: true, minLength: 4 })} />
+                {errors.lead_types_id && errors.lead_types_id.type === "required" && (<span style={fillerrstyle}>Please Fill out This Field</span>)}
+                {errors.lead_types_id && errors.lead_types_id.type === "minLength" && (<span style={fillerrstyle}>min 4 characters</span>)}
             
+            
+              <button type="submit"  className={styles.btn} >Submit</button>
+            </form>
+       </div>
 
-             <label>Lead types ids</label>
-             <input type="text"    onChange ={handleInput}      name="lead_types_id"   value = {edata.lead_types_id}   placeholder=" enter lead_types_id "/>
-           
-             <button type="submit" className={styles.btn}>  Add Now</button>
-          </form>
-
-        </div>
-
-    </>
-  )
+        </>
+    )
 }
+

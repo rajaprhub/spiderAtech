@@ -6,7 +6,7 @@
     align-items: center;
     margin: 20px auto;
     padding: 15px;
-    background-color: #adb5bd;
+   box-shadow: rgba(0, 0, 0, 0.24) 0px 3px 8px;
 }
 
 
@@ -22,14 +22,14 @@ form{
 
 form > input {
     width: 100%;
-    border: 1px solid gray;
+    border: 1px solid goldenrod;
     border-radius: 3px;
     padding: 5px;
     margin: 10px;
 }
 
 .btn{
-    background-color: black;
+    background-color: maroon;
     padding: 5px;
     color: white;
     border-radius: 3px;
